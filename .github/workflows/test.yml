@@ -22,5 +22,5 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
-          SLACK_WEBHOOK_URL: ${{ slack_url }}
+          SLACK_WEBHOOK_URL: ${{ input.slack_url }}
         if: ${{ github.event_name == 'pull_request' && !github.event.pull_request.draft }}
