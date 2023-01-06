@@ -1,0 +1,26 @@
+name: Reusable workflow example
+
+on:
+  workflow_call:
+  
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Send Slack Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                title: '>>> 이것은 테스트 >>>',
+                footer: '리뷰 및 승인 부탁드립니다',
+                footer_icon: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/eye.png'
+              }]
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
+          SLACK_WEBHOOK_URL: ${{ slack_url }}
+        if: ${{ github.event_name == 'pull_request' && !github.event.pull_request.draft }}
